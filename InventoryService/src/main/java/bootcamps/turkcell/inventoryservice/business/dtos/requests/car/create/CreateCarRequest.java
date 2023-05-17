@@ -16,13 +16,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateCarRequest {
-    @NotBlank
+    @NotNull
     private UUID modelId;
 
     @NotNull
     @Min(1885)
     @NotFutureYear
-    private short modelYear;
+    private int modelYear;
 
     @Pattern(regexp = Regex.LICENSE_PLATE_TR)
     private String licensePlate;

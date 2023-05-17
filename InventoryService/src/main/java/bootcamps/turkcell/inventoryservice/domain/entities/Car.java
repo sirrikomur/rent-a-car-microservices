@@ -19,7 +19,7 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private short modelYear;
+    private int modelYear;
     private String licensePlate;
     private double dailyRental;
 

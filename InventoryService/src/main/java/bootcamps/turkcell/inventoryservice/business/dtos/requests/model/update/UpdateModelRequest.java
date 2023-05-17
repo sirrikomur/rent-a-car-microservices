@@ -1,6 +1,7 @@
 package bootcamps.turkcell.inventoryservice.business.dtos.requests.model.update;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateModelRequest {
-    @NotBlank
+    @NotNull
     private UUID brandId;
 
     @NotBlank

@@ -1,10 +1,16 @@
 spring:
   application:
-    name: filter-service
-  data:
-    mongodb:
-      database: filterdb
-      uri: mongodb://localhost:27017
+    name: inventory-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/inventoryDB
+    username: postgres
+    password: 12345
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 eureka:
   instance:
     hostname: localhost
