@@ -1,9 +1,11 @@
 package bootcamps.turkcell.inventoryservice.business.managers;
 
 
+import bootcamps.turkcell.common.events.inventory.CarCreatedEvent;
 import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
+import bootcamps.turkcell.inventoryservice.brokers.kafka.producers.InventoryProducer;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.car.create.CreateCarRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.car.update.UpdateCarRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.responses.car.create.CreateCarResponse;
@@ -28,6 +30,8 @@ public class CarManager implements CarService {
     private final CrudRules crudRules;
     private final ModelMapperService mapper;
 
+    private final InventoryProducer producer;
+
     @Override
     public List<GetAllCarsResponse> getAll() {
         List<Car> cars = repository.findAll();
@@ -46,9 +50,12 @@ public class CarManager implements CarService {
         Car car = mapper.forRequest().map(carRequest, Car.class);
         car.setId(UUID.randomUUID());
         car.setState(CarState.AVAILABLE);
-        repository.save(car);
+        var createdCar = repository.save(car);
 
-        return mapper.forResponse().map(car, CreateCarResponse.class);
+        var event = mapper.forResponse().map(createdCar, CarCreatedEvent.class);
+        producer.sendMessage(event);
+
+        return mapper.forResponse().map(createdCar, CreateCarResponse.class);
     }
 
     @Override
