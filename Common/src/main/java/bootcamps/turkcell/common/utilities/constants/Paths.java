@@ -7,11 +7,11 @@ public class Paths {
         public static final String ServiceBasePackage = "bootcamps.turkcell.inventoryservice";
     }
 
-    /*public static class Filter {
+    public static class Filter {
         public static final String ServiceBasePackage = "bootcamps.turkcell.filterservice";
     }
 
-    public static class Rental {
+    /*public static class Rental {
         public static final String ServiceBasePackage = "bootcamps.turkcell.rentalservice";
     }
 
