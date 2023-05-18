@@ -1,7 +1,9 @@
 package bootcamps.turkcell.inventoryservice.business.managers;
 
+import bootcamps.turkcell.common.events.inventory.BrandDeletedEvent;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
+import bootcamps.turkcell.inventoryservice.brokers.kafka.producers.InventoryProducer;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.brand.create.CreateBrandRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.brand.update.UpdateBrandRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.responses.brand.create.CreateBrandResponse;
@@ -25,6 +27,7 @@ public class BrandManager implements BrandService {
     private final BrandBusinessRules rules;
     private final CrudRules crudRules;
     private final ModelMapperService mapper;
+    private final InventoryProducer producer;
 
     @Override
     public List<GetAllBrandsResponse> getAll() {
@@ -43,7 +46,7 @@ public class BrandManager implements BrandService {
         rules.brandNameCannotBeRepeated(brandRequest.getName());
 
         Brand brand = mapper.forRequest().map(brandRequest, Brand.class);
-        brand.setId(UUID.randomUUID());
+        //brand.setId(UUID.randomUUID());
         repository.save(brand);
 
         return mapper.forResponse().map(brand, CreateBrandResponse.class);
@@ -65,5 +68,6 @@ public class BrandManager implements BrandService {
     public void delete(UUID id) {
         crudRules.idCannotBeProcessedWhenNotExists(id, repository);
         repository.deleteById(id);
+        producer.sendMessage(new BrandDeletedEvent(id));
     }
 }

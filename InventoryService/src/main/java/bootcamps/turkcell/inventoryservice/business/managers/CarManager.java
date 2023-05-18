@@ -2,6 +2,7 @@ package bootcamps.turkcell.inventoryservice.business.managers;
 
 
 import bootcamps.turkcell.common.events.inventory.CarCreatedEvent;
+import bootcamps.turkcell.common.events.inventory.CarDeletedEvent;
 import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
@@ -72,7 +73,7 @@ public class CarManager implements CarService {
     @Override
     public void delete(UUID id) {
         crudRules.idCannotBeProcessedWhenNotExists(id, repository);
-
         repository.deleteById(id);
+        producer.sendMessage(new CarDeletedEvent(id));
     }
 }
