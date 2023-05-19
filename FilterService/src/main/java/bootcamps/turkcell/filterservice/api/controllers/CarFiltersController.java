@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/car-filters")
+@RequestMapping("/filter/api/car-filters")
 public class CarFiltersController {
     private final CarFilterService service;
 

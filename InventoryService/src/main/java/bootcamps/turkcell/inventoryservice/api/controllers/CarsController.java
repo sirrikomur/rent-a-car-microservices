@@ -1,5 +1,7 @@
 package bootcamps.turkcell.inventoryservice.api.controllers;
 
+import bootcamps.turkcell.common.utilities.dtos.ClientResponse;
+import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.car.create.CreateCarRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.car.update.UpdateCarRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.responses.car.create.CreateCarResponse;
@@ -16,7 +18,7 @@ import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/cars")
+@RequestMapping(value = "/api/cars")
 public class CarsController {
     private final CarService service;
 
@@ -44,4 +46,15 @@ public class CarsController {
     public void delete(@PathVariable UUID id) {
         service.delete(id);
     }
+
+    @PutMapping("/{id}/car-state")
+    public void changeState(@PathVariable UUID id, @RequestBody CarState carState) {
+        service.changeState(id, carState);
+    }
+
+    @GetMapping("/check-car-available/{id}")
+    public ClientResponse checkIfCarAvailable(@PathVariable UUID id) {
+        return service.checkIfCarAvailable(id);
+    }
+
 }

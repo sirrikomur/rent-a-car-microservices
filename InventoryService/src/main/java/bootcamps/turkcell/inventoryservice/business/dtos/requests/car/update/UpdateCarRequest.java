@@ -2,6 +2,7 @@ package bootcamps.turkcell.inventoryservice.business.dtos.requests.car.update;
 
 import bootcamps.turkcell.common.utilities.annotations.NotFutureYear;
 import bootcamps.turkcell.common.utilities.constants.Regex;
+import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,4 +30,6 @@ public class UpdateCarRequest {
     @NotNull
     @PositiveOrZero
     private double dailyRental;
+
+    private CarState carState;
 }

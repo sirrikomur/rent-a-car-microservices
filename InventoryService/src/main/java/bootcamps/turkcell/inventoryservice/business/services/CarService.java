@@ -1,5 +1,6 @@
 package bootcamps.turkcell.inventoryservice.business.services;
 
+import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.car.create.CreateCarRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.car.update.UpdateCarRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.responses.car.create.CreateCarResponse;
@@ -16,4 +17,9 @@ public interface CarService {
     CreateCarResponse create(CreateCarRequest carRequest);
     UpdateCarResponse update(UUID id, UpdateCarRequest carRequest);
     void delete(UUID id);
+
+    void changeState(UUID id, CarState state);
+
+
+    //ClientResponse checkIfCarAvailable(UUID id);
 }

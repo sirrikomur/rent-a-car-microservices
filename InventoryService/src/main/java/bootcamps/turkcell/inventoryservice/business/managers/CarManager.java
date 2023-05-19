@@ -3,10 +3,11 @@ package bootcamps.turkcell.inventoryservice.business.managers;
 
 import bootcamps.turkcell.common.events.inventory.CarCreatedEvent;
 import bootcamps.turkcell.common.events.inventory.CarDeletedEvent;
+import bootcamps.turkcell.common.utilities.brokers.kafka.producers.KafkaProducer;
+import bootcamps.turkcell.common.utilities.constants.Topics;
 import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
-import bootcamps.turkcell.inventoryservice.brokers.kafka.producers.InventoryProducer;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.car.create.CreateCarRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.car.update.UpdateCarRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.responses.car.create.CreateCarResponse;
@@ -30,8 +31,7 @@ public class CarManager implements CarService {
     private final CarBusinessRules rules;
     private final CrudRules crudRules;
     private final ModelMapperService mapper;
-
-    private final InventoryProducer producer;
+    private final KafkaProducer producer;
 
     @Override
     public List<GetAllCarsResponse> getAll() {
@@ -41,7 +41,8 @@ public class CarManager implements CarService {
 
     @Override
     public GetCarResponse getById(UUID id) {
-        Car car = repository.findById(id).orElseThrow();
+        crudRules.idCannotBeProcessedWhenNotExists(id, repository);
+        var car = repository.findById(id);
         return mapper.forResponse().map(car, GetCarResponse.class);
     }
 
@@ -54,7 +55,7 @@ public class CarManager implements CarService {
         var createdCar = repository.save(car);
 
         var event = mapper.forResponse().map(createdCar, CarCreatedEvent.class);
-        producer.sendMessage(event);
+        producer.sendMessage(event, Topics.Inventory.CAR_CREATED);
 
         return mapper.forResponse().map(createdCar, CreateCarResponse.class);
     }
@@ -62,7 +63,7 @@ public class CarManager implements CarService {
     @Override
     public UpdateCarResponse update(UUID id, UpdateCarRequest carRequest) {
         crudRules.idCannotBeProcessedWhenNotExists(id, repository);
-        rules.licensePlateCannotBeRepeated(carRequest.getLicensePlate());
+        //rules.licensePlateCannotBeRepeated(carRequest.getLicensePlate());
 
         Car car = mapper.forRequest().map(carRequest, Car.class);
         car.setId(id);
@@ -74,6 +75,32 @@ public class CarManager implements CarService {
     public void delete(UUID id) {
         crudRules.idCannotBeProcessedWhenNotExists(id, repository);
         repository.deleteById(id);
-        producer.sendMessage(new CarDeletedEvent(id));
+        producer.sendMessage(new CarDeletedEvent(id), Topics.Inventory.CAR_DELETED);
     }
+
+    @Override
+    public void changeState(UUID id, CarState state) {
+        Car car = repository.findById(id).orElseThrow();
+        car.setState(state);
+        repository.save(car);
+    }
+
+    /*@Override
+    public ClientResponse checkIfCarAvailable(UUID id) {
+        ClientResponse clientResponse = new ClientResponse();
+        validateIfCarAvailable(id, clientResponse);
+
+        return clientResponse;
+    }*/
+
+    /*private void validateIfCarAvailable(UUID id, ClientResponse response) {
+        try {
+            crudRules.idCannotBeProcessedWhenNotExists(id, repository);
+            rules.carStateMustAvailable(id);
+            response.setSuccess(true);
+        } catch (BusinessException exception) {
+            response.setSuccess(false);
+            response.setMessage(exception.getMessage());
+        }
+    }*/
 }

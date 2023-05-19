@@ -1,9 +1,10 @@
 package bootcamps.turkcell.inventoryservice.business.managers;
 
 import bootcamps.turkcell.common.events.inventory.BrandDeletedEvent;
+import bootcamps.turkcell.common.utilities.brokers.kafka.producers.KafkaProducer;
+import bootcamps.turkcell.common.utilities.constants.Topics;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
-import bootcamps.turkcell.inventoryservice.brokers.kafka.producers.InventoryProducer;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.brand.create.CreateBrandRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.brand.update.UpdateBrandRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.responses.brand.create.CreateBrandResponse;
@@ -27,7 +28,7 @@ public class BrandManager implements BrandService {
     private final BrandBusinessRules rules;
     private final CrudRules crudRules;
     private final ModelMapperService mapper;
-    private final InventoryProducer producer;
+    private final KafkaProducer producer;
 
     @Override
     public List<GetAllBrandsResponse> getAll() {
@@ -68,6 +69,6 @@ public class BrandManager implements BrandService {
     public void delete(UUID id) {
         crudRules.idCannotBeProcessedWhenNotExists(id, repository);
         repository.deleteById(id);
-        producer.sendMessage(new BrandDeletedEvent(id));
+        producer.sendMessage(new BrandDeletedEvent(id), Topics.Inventory.BRAND_DELETED);
     }
 }

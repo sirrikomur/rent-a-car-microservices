@@ -1,9 +1,10 @@
 package bootcamps.turkcell.inventoryservice.business.managers;
 
 import bootcamps.turkcell.common.events.inventory.ModelDeletedEvent;
+import bootcamps.turkcell.common.utilities.brokers.kafka.producers.KafkaProducer;
+import bootcamps.turkcell.common.utilities.constants.Topics;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
-import bootcamps.turkcell.inventoryservice.brokers.kafka.producers.InventoryProducer;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.model.create.CreateModelRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.model.update.UpdateModelRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.responses.model.create.CreateModelResponse;
@@ -27,7 +28,7 @@ public class ModelManager implements ModelService {
     private final ModelBusinessRules rules;
     private final CrudRules crudRules;
     private final ModelMapperService mapper;
-    private final InventoryProducer producer;
+    private final KafkaProducer producer;
 
     @Override
     public List<GetAllModelsResponse> getAll() {
@@ -64,6 +65,6 @@ public class ModelManager implements ModelService {
     public void delete(UUID id) {
         crudRules.idCannotBeProcessedWhenNotExists(id, repository);
         repository.deleteById(id);
-        producer.sendMessage(new ModelDeletedEvent(id));
+        producer.sendMessage(new ModelDeletedEvent(id), Topics.Inventory.MODEL_DELETED);
     }
 }

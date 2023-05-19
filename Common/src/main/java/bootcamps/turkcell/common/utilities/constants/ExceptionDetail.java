@@ -5,6 +5,9 @@ public class ExceptionDetail {
         public final static String BUSINESS_EXCEPTION = "BUSINESS_EXCEPTION";
         public final static String VALIDATION_EXCEPTION = "VALIDATION_EXCEPTION";
         public final static String ILLEGAL_ARGUMENT_EXCEPTION = "ILLEGAL_ARGUMENT_EXCEPTION";
+        public final static String DATA_INTEGRITY_VIOLATION_EXCEPTION = "DATA_INTEGRITY_VIOLATION_EXCEPTION";
+        public final static String RUNTIME_EXCEPTION = "RUNTIME_EXCEPTION";
+        public final static String INTERNAL_SERVER_ERROR = "INTERNAL_SERVER_ERROR";
     }
 
     public static class Messages {
