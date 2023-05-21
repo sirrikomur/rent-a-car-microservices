@@ -22,4 +22,5 @@ public class Rental {
     private UUID carId;
     private LocalDate startDate;
     private LocalDate endDate;
+    private boolean isCompleted;
 }

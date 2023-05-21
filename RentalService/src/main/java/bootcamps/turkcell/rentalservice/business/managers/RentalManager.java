@@ -1,12 +1,15 @@
 package bootcamps.turkcell.rentalservice.business.managers;
 
 
+import bootcamps.turkcell.common.events.inventory.CarStateUpdatedEvent;
+import bootcamps.turkcell.common.utilities.brokers.kafka.producers.KafkaProducer;
+import bootcamps.turkcell.common.utilities.constants.Topics;
 import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
 import bootcamps.turkcell.common.utilities.formats.Conversion;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.common.utilities.operations.Mathematics;
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
-import bootcamps.turkcell.rentalservice.api.clients.car.CarClient;
+import bootcamps.turkcell.rentalservice.api.clients.inventory.car.CarClient;
 import bootcamps.turkcell.rentalservice.business.dtos.requests.rental.create.CreateRentalRequest;
 import bootcamps.turkcell.rentalservice.business.dtos.requests.rental.update.UpdateRentalRequest;
 import bootcamps.turkcell.rentalservice.business.dtos.responses.rental.create.CreateRentalResponse;
@@ -30,6 +33,7 @@ public class RentalManager implements RentalService {
     private final RentalRepository repository;
     private final RentalBusinessRules businessRules;
     private final CrudRules crudRules;
+    private final KafkaProducer producer;
     private final ModelMapperService mapper;
     private final CarClient carClient;
 
@@ -45,39 +49,46 @@ public class RentalManager implements RentalService {
         return mapper.forResponse().map(rental, GetRentalResponse.class);
     }
 
-    @Override
-    public GetRentalResponse finishRental(UUID carId) {
-        businessRules.carCannotBeFinishedWhenNotRented(carId);
-        Rental rental = repository.findByCarId(carId);
-        rental.setEndDate(LocalDate.now());
-        repository.save(rental);
-        carClient.changeState(carId, CarState.AVAILABLE);
-        return mapper.forResponse().map(rental, GetRentalResponse.class);
-    }
 
     @Override
-    public CreateRentalResponse create(CreateRentalRequest rentalRequest) {
-        var car = carClient.getById(rentalRequest.getCarId());
+    public CreateRentalResponse create(CreateRentalRequest request) {
+        businessRules.carCannotBeRentedWhenRented(request.getCarId());
+        businessRules.carCannotBeRentedWhenMaintenance(request.getCarId());
+        businessRules.carCannotBeRentedWhenNotAvailable(request.getCarId());
 
-        businessRules.carCannotBeRentedWhenRented(car.getCarState());
-        businessRules.carCannotBeRentedWhenMaintenance(car.getCarState());
-        businessRules.carCannotBeRentedWhenNotAvailable(car.getCarState());
-
-        Rental rental = mapper.forRequest().map(rentalRequest, Rental.class);
+        Rental rental = mapper.forRequest().map(request, Rental.class);
         String datePattern = "d/M/yyyy";
-        LocalDate startDate = Conversion.date(rentalRequest.getStartDate(), datePattern);
-        LocalDate endDate = Conversion.date(rentalRequest.getEndDate(), datePattern);
+        LocalDate startDate = Conversion.date(request.getStartDate(), datePattern);
+        LocalDate endDate = Conversion.date(request.getEndDate(), datePattern);
 
         rental.setStartDate(startDate);
         rental.setEndDate(endDate);
+        rental.setCompleted(false);
+        carClient.changeState(request.getCarId(), CarState.RENTED);
 
-        carClient.changeState(rentalRequest.getCarId(), CarState.RENTED);
+        var createdRental = repository.save(rental);
+
+        producer.sendMessage(new CarStateUpdatedEvent(request.getCarId(), CarState.RENTED), Topics.Inventory.CAR_STATE_UPDATED);
+        return mapper.forResponse().map(createdRental, CreateRentalResponse.class);
+    }
+
+    @Override
+    public GetRentalResponse finishRental(UUID id) {
+        crudRules.idCannotBeProcessedWhenNotExists(id, repository);
+        var carId = repository.findById(id).orElseThrow().getCarId();
+
+        businessRules.carCannotBeFinishedWhenNotRented(carId);
+
+        Rental rental = repository.findById(id).orElseThrow();
+        rental.setEndDate(LocalDate.now());
+        rental.setCompleted(true);
+        repository.save(rental);
+
+        carClient.changeState(carId, CarState.AVAILABLE);
 
         //createInvoiceRequest(rentalRequest, rental);
 
-        repository.save(rental);
-
-        return mapper.forResponse().map(rental, CreateRentalResponse.class);
+        return mapper.forResponse().map(rental, GetRentalResponse.class);
     }
 
     @Override

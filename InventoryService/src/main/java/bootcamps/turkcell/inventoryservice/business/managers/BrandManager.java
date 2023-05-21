@@ -47,10 +47,9 @@ public class BrandManager implements BrandService {
         rules.brandNameCannotBeRepeated(brandRequest.getName());
 
         Brand brand = mapper.forRequest().map(brandRequest, Brand.class);
-        //brand.setId(UUID.randomUUID());
-        repository.save(brand);
+        var createdBrand = repository.save(brand);
 
-        return mapper.forResponse().map(brand, CreateBrandResponse.class);
+        return mapper.forResponse().map(createdBrand, CreateBrandResponse.class);
     }
 
     @Override

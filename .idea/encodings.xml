@@ -9,6 +9,8 @@
     <file url="file://$PROJECT_DIR$/DiscoveryServer/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/FilterService/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/InventoryService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/MaintenanceService/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/MaintenanceService/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/RentalService/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/RentalService/src/main/resources" charset="UTF-8" />
   </component>

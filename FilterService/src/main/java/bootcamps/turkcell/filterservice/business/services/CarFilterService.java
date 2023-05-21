@@ -1,5 +1,6 @@
 package bootcamps.turkcell.filterservice.business.services;
 
+import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
 import bootcamps.turkcell.filterservice.business.dtos.responses.GetAllCarFiltersResponse;
 import bootcamps.turkcell.filterservice.business.dtos.responses.GetCarFilterResponse;
 import bootcamps.turkcell.filterservice.domain.entities.CarFilter;
@@ -16,4 +17,5 @@ public interface CarFilterService {
     void deleteByCarId(UUID carId);
     void deleteAllByBrandId(UUID brandId);
     void deleteAllByModelId(UUID modelId);
+    void updateCarStateByCarId(UUID carId, CarState carState);
 }

@@ -7,7 +7,9 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/rentalDB
     username: postgres
-    password: 12345
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update

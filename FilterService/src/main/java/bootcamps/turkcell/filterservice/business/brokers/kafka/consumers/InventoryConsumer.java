@@ -1,9 +1,6 @@
-package bootcamps.turkcell.filterservice.broker.kafka.consumer;
+package bootcamps.turkcell.filterservice.business.brokers.kafka.consumers;
 
-import bootcamps.turkcell.common.events.inventory.BrandDeletedEvent;
-import bootcamps.turkcell.common.events.inventory.CarCreatedEvent;
-import bootcamps.turkcell.common.events.inventory.CarDeletedEvent;
-import bootcamps.turkcell.common.events.inventory.ModelDeletedEvent;
+import bootcamps.turkcell.common.events.inventory.*;
 import bootcamps.turkcell.common.utilities.constants.Topics;
 import bootcamps.turkcell.common.utilities.formats.Information;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
@@ -12,6 +9,7 @@ import bootcamps.turkcell.filterservice.domain.entities.CarFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +19,7 @@ public class InventoryConsumer {
     private final CarFilterService carFilterService;
     private final ModelMapperService mapper;
 
+    /* CAR */
     @KafkaListener(
             groupId = "car-create",
             topics = Topics.Inventory.CAR_CREATED
@@ -29,7 +28,6 @@ public class InventoryConsumer {
         var filter = mapper.forRequest().map(event, CarFilter.class);
         carFilterService.add(filter);
         log.info(Information.Consume.log(event));
-        //log.info(MessageFormat.format("Consumed: {0} --> ({1})", event.getClass().getSimpleName(), event));
     }
 
     @KafkaListener(
@@ -42,6 +40,16 @@ public class InventoryConsumer {
     }
 
     @KafkaListener(
+            groupId = "car-state-update",
+            topics = Topics.Inventory.CAR_STATE_UPDATED
+    )
+    public void consume(CarStateUpdatedEvent event) {
+        carFilterService.updateCarStateByCarId(event.getCarId(), event.getCarState());
+        log.info(Information.Consume.log(event));
+    }
+
+    /* BRAND */
+    @KafkaListener(
             groupId = "brand-delete",
             topics = Topics.Inventory.BRAND_DELETED
     )
@@ -50,7 +58,7 @@ public class InventoryConsumer {
         log.info(Information.Consume.log(event));
     }
 
-
+    /* MODEL */
     @KafkaListener(
             groupId = "model-delete",
             topics = Topics.Inventory.MODEL_DELETED

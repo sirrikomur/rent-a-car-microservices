@@ -52,9 +52,9 @@ public class CarsController {
         service.changeState(id, carState);
     }
 
-    @GetMapping("/check-car-available/{id}")
+   /* @GetMapping("/check-car-available/{id}")
     public ClientResponse checkIfCarAvailable(@PathVariable UUID id) {
         return service.checkIfCarAvailable(id);
-    }
+    }*/
 
 }

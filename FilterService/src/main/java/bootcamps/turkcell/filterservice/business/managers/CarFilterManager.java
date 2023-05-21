@@ -1,5 +1,6 @@
 package bootcamps.turkcell.filterservice.business.managers;
 
+import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.filterservice.business.dtos.responses.GetAllCarFiltersResponse;
 import bootcamps.turkcell.filterservice.business.dtos.responses.GetCarFilterResponse;
@@ -59,5 +60,12 @@ public class CarFilterManager implements CarFilterService {
     @Override
     public void deleteAllByModelId(UUID modelId) {
         repository.deleteAllByModelId(modelId);
+    }
+
+    @Override
+    public void updateCarStateByCarId(UUID carId, CarState carState) {
+        var filter = repository.findByCarId(carId);
+        filter.setCarState(carState);
+        repository.save(filter);
     }
 }

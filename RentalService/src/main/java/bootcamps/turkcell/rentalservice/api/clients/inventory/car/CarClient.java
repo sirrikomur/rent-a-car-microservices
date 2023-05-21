@@ -1,4 +1,4 @@
-package bootcamps.turkcell.rentalservice.api.clients.car;
+package bootcamps.turkcell.rentalservice.api.clients.inventory.car;
 
 import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
 import bootcamps.turkcell.rentalservice.business.dtos.responses.clients.GetCarClientResponse;

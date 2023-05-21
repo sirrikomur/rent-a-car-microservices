@@ -18,9 +18,9 @@ services:
       KAFKA_ADVERTISED_HOST_NAME: localhost
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
 
-  mongodb:
-    image: mongo
-    container_name: filterdb
+  mongo:
+    image: mongo:latest
+    container_name: mongo
     ports:
       - "27017:27017"
     volumes:
@@ -28,6 +28,30 @@ services:
     environment:
       KAFKA_ADVERTISED_HOST_NAME: localhost
 
+  postgresql:
+    image: postgres:latest
+    container_name: postgresql
+    environment:
+      POSTGRES_PASSWORD: postgres
+      #MYSQL_DATABASE:
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/data/db
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      #MYSQL_DATABASE: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/data/db
+
 volumes:
   kafka_data:
   mongodb_data:
+  postgres-data:
+  mysql-data:

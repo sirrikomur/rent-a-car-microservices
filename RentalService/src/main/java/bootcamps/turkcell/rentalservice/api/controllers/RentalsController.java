@@ -39,9 +39,9 @@ public class RentalsController {
         return service.update(id, rentalRequest);
     }
 
-    @PutMapping("/finish")
-    public GetRentalResponse finishRental(@RequestParam UUID carId) {
-        return service.finishRental(carId);
+    @PutMapping("/{id}/finish")
+    public GetRentalResponse finishRental(@PathVariable UUID id) {
+        return service.finishRental(id);
     }
 
     @DeleteMapping("/{id}")

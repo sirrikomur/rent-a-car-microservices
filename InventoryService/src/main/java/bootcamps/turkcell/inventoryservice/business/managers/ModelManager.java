@@ -46,9 +46,8 @@ public class ModelManager implements ModelService {
     public CreateModelResponse create(CreateModelRequest modelRequest) {
         rules.modelNameCannotBeRepeated(modelRequest.getName());
         Model model = mapper.forRequest().map(modelRequest, Model.class);
-        model.setId(UUID.randomUUID());
-        repository.save(model);
-        return mapper.forResponse().map(model, CreateModelResponse.class);
+        var createdModel = repository.save(model);
+        return mapper.forResponse().map(createdModel, CreateModelResponse.class);
     }
 
     @Override

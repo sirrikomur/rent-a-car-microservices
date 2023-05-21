@@ -3,6 +3,7 @@ package bootcamps.turkcell.inventoryservice.business.managers;
 
 import bootcamps.turkcell.common.events.inventory.CarCreatedEvent;
 import bootcamps.turkcell.common.events.inventory.CarDeletedEvent;
+import bootcamps.turkcell.common.events.inventory.CarStateUpdatedEvent;
 import bootcamps.turkcell.common.utilities.brokers.kafka.producers.KafkaProducer;
 import bootcamps.turkcell.common.utilities.constants.Topics;
 import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
@@ -10,6 +11,7 @@ import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperServic
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.car.create.CreateCarRequest;
 import bootcamps.turkcell.inventoryservice.business.dtos.requests.car.update.UpdateCarRequest;
+import bootcamps.turkcell.inventoryservice.business.dtos.responses.car.ChangeResponse;
 import bootcamps.turkcell.inventoryservice.business.dtos.responses.car.create.CreateCarResponse;
 import bootcamps.turkcell.inventoryservice.business.dtos.responses.car.get.GetAllCarsResponse;
 import bootcamps.turkcell.inventoryservice.business.dtos.responses.car.get.GetCarResponse;
@@ -50,7 +52,6 @@ public class CarManager implements CarService {
     public CreateCarResponse create(CreateCarRequest carRequest) {
         rules.licensePlateCannotBeRepeated(carRequest.getLicensePlate());
         Car car = mapper.forRequest().map(carRequest, Car.class);
-        car.setId(UUID.randomUUID());
         car.setState(CarState.AVAILABLE);
         var createdCar = repository.save(car);
 
@@ -83,6 +84,7 @@ public class CarManager implements CarService {
         Car car = repository.findById(id).orElseThrow();
         car.setState(state);
         repository.save(car);
+        producer.sendMessage(new CarStateUpdatedEvent(id, state), Topics.Inventory.CAR_STATE_UPDATED);
     }
 
     /*@Override

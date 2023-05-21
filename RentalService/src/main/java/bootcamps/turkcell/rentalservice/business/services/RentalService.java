@@ -14,7 +14,7 @@ import java.util.UUID;
 public interface RentalService {
     List<GetAllRentalsResponse> getAll();
     GetRentalResponse getById(UUID id);
-    GetRentalResponse finishRental(UUID carId);
+    GetRentalResponse finishRental(UUID id);
     CreateRentalResponse create(CreateRentalRequest rentalRequest);
     UpdateRentalResponse update(UUID id, UpdateRentalRequest rentalRequest);
     void delete(UUID id);
