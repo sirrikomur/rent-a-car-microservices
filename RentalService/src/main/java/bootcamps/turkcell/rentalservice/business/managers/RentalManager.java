@@ -4,12 +4,16 @@ package bootcamps.turkcell.rentalservice.business.managers;
 import bootcamps.turkcell.common.events.inventory.CarStateUpdatedEvent;
 import bootcamps.turkcell.common.utilities.brokers.kafka.producers.KafkaProducer;
 import bootcamps.turkcell.common.utilities.constants.Topics;
+import bootcamps.turkcell.common.utilities.constants.Values;
 import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
 import bootcamps.turkcell.common.utilities.formats.Conversion;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
+import bootcamps.turkcell.common.utilities.operations.Calculation;
 import bootcamps.turkcell.common.utilities.operations.Mathematics;
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
 import bootcamps.turkcell.rentalservice.api.clients.inventory.car.CarClient;
+import bootcamps.turkcell.rentalservice.api.clients.invoice.InvoiceClient;
+import bootcamps.turkcell.rentalservice.business.dtos.requests.clients.CreateInvoiceClientRequest;
 import bootcamps.turkcell.rentalservice.business.dtos.requests.rental.create.CreateRentalRequest;
 import bootcamps.turkcell.rentalservice.business.dtos.requests.rental.update.UpdateRentalRequest;
 import bootcamps.turkcell.rentalservice.business.dtos.responses.rental.create.CreateRentalResponse;
@@ -36,6 +40,7 @@ public class RentalManager implements RentalService {
     private final KafkaProducer producer;
     private final ModelMapperService mapper;
     private final CarClient carClient;
+    private final InvoiceClient invoiceClient;
 
     @Override
     public List<GetAllRentalsResponse> getAll() {
@@ -86,16 +91,16 @@ public class RentalManager implements RentalService {
 
         carClient.changeState(carId, CarState.AVAILABLE);
 
-        //createInvoiceRequest(rentalRequest, rental);
+        createInvoice(carId, rental);
 
         return mapper.forResponse().map(rental, GetRentalResponse.class);
     }
 
     @Override
-    public UpdateRentalResponse update(UUID id, UpdateRentalRequest rentalRequest) {
+    public UpdateRentalResponse update(UUID id, UpdateRentalRequest request) {
         crudRules.idCannotBeProcessedWhenNotExists(id, repository);
 
-        Rental rental = mapper.forRequest().map(rentalRequest, Rental.class);
+        Rental rental = mapper.forRequest().map(request, Rental.class);
         rental.setId(id);
         repository.save(rental);
         return mapper.forResponse().map(rental, UpdateRentalResponse.class);
@@ -108,29 +113,31 @@ public class RentalManager implements RentalService {
         repository.deleteById(id);
     }
 
-    /*private void createInvoiceRequest(CreateRentalRequest rentalRequest, Rental rental) {
-        GetCarResponse carResponse = carService.getById(rentalRequest.getCarId());
-        double dailyRental = carService.getById(rentalRequest.getCarId()).getDailyRental();
+    private void createInvoice(UUID carId, Rental rental) {
+        var car = carClient.getById(carId);
+        double dailyRental = car.getDailyRental();
         double rentalPrice = calculateRentalPrice(Calculation.daysBetween(rental.getStartDate(), rental.getEndDate()), dailyRental, Values.TaxRate.VAT);
 
         //pay(rentalPrice);
 
-        invoiceService.create(new CreateInvoiceRequest(
-                carResponse.getBrandName(),
-                carResponse.getModelName(),
-                carResponse.getModelYear(),
-                carResponse.getLicensePlate(),
+        invoiceClient.create(new CreateInvoiceClientRequest(
+                car.getBrandName(),
+                car.getModelName(),
+                car.getModelYear(),
+                car.getLicensePlate(),
                 rental.getStartDate(),
                 rental.getEndDate(),
-                carResponse.getDailyRental(),
+                car.getDailyRental(),
                 rentalPrice));
-    }*/
+    }
 
     /*private void pay(double rentalPrice) {
         paymentService.pay(new Card(), rentalPrice);
     }*/
 
     private double calculateRentalPrice(int numberOfDaysRented, double dailyPrice, double taxRate) {
+        var percent = Mathematics.addPercentOf(dailyPrice, taxRate);
+        System.err.println(percent);
         return Mathematics.addPercentOf(dailyPrice, taxRate) * numberOfDaysRented;
     }
 }

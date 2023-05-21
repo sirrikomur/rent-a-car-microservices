@@ -1,6 +1,7 @@
 package bootcamps.turkcell.rentalservice.api.clients.inventory.car;
 
 import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
+import bootcamps.turkcell.rentalservice.api.clients.inventory.InventoryClientFallback;
 import bootcamps.turkcell.rentalservice.business.dtos.responses.clients.GetCarClientResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.UUID;
 
-@FeignClient(name = "inventory-service", fallback = CarClientFallback.class)
+@FeignClient(name = "inventory-service", fallback = InventoryClientFallback.class)
 public interface CarClient {
 
     @GetMapping("/api/cars/{carId}")
@@ -18,9 +19,4 @@ public interface CarClient {
 
     @PutMapping("/api/cars/{id}/car-state")
     void changeState(@PathVariable UUID id, @RequestBody CarState carState);
-
-    /*@GetMapping(value = "/api/cars/check-car-available/{carId}")
-    @Retry(name = "check-if-car-available")
-    ClientResponse<Entity> checkIfCarAvailable(@PathVariable UUID carId);*/
-
 }

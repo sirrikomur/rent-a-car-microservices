@@ -6,6 +6,6 @@ public class Mathematics {
     }
 
     public static double addPercentOf(double value, double percentage) {
-        return value + (value * percentage) / 100;
+        return value + percentOf(value, percentage);
     }
 }

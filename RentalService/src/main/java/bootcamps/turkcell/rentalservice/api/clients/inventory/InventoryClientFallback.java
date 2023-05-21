@@ -1,6 +1,7 @@
-package bootcamps.turkcell.rentalservice.api.clients.inventory.car;
+package bootcamps.turkcell.rentalservice.api.clients.inventory;
 
 import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
+import bootcamps.turkcell.rentalservice.api.clients.inventory.car.CarClient;
 import bootcamps.turkcell.rentalservice.business.dtos.responses.clients.GetCarClientResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -9,7 +10,7 @@ import java.util.UUID;
 
 @Slf4j
 @Component
-public class CarClientFallback implements CarClient {
+public class InventoryClientFallback implements CarClient {
     @Override
     public GetCarClientResponse getById(UUID carId) {
         log.info("Inventory Service: DISABLED!");
@@ -21,10 +22,4 @@ public class CarClientFallback implements CarClient {
         log.info("Inventory Service: DISABLED!");
         throw new RuntimeException("Inventory Service: DISABLED!");
     }
-
-    /*@Override
-    public ClientResponse checkIfCarAvailable(UUID carId) {
-        log.info("INVENTORY SERVICE IS DOWN!");
-        throw new RuntimeException("INVENTORY SERVICE IS DOWN!");
-    }*/
 }
