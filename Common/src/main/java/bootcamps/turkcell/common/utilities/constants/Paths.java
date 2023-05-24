@@ -23,7 +23,7 @@ public class Paths {
         public static final String ServiceBasePackage = "bootcamps.turkcell.invoiceservice";
     }
 
-    /*public static class Payment {
+    public static class Payment {
         public static final String ServiceBasePackage = "bootcamps.turkcell.paymentservice";
-    }*/
+    }
 }

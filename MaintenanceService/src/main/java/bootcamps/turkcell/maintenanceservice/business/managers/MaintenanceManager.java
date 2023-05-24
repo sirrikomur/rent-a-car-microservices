@@ -1,16 +1,16 @@
 package bootcamps.turkcell.maintenanceservice.business.managers;
 
 
+import bootcamps.turkcell.common.clients.inventory.car.CarClient;
+import bootcamps.turkcell.common.utilities.dtos.maintenance.requests.create.CreateMaintenanceRequest;
+import bootcamps.turkcell.common.utilities.dtos.maintenance.requests.update.UpdateMaintenanceRequest;
+import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.create.CreateMaintenanceResponse;
+import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.get.GetAllMaintenancesResponse;
+import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.get.GetMaintenanceResponse;
+import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.update.UpdateMaintenanceResponse;
 import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
-import bootcamps.turkcell.maintenanceservice.api.clients.inventory.car.CarClient;
-import bootcamps.turkcell.maintenanceservice.business.dtos.requests.create.CreateMaintenanceRequest;
-import bootcamps.turkcell.maintenanceservice.business.dtos.requests.update.UpdateMaintenanceRequest;
-import bootcamps.turkcell.maintenanceservice.business.dtos.responses.create.CreateMaintenanceResponse;
-import bootcamps.turkcell.maintenanceservice.business.dtos.responses.get.GetAllMaintenancesResponse;
-import bootcamps.turkcell.maintenanceservice.business.dtos.responses.get.GetMaintenanceResponse;
-import bootcamps.turkcell.maintenanceservice.business.dtos.responses.update.UpdateMaintenanceResponse;
 import bootcamps.turkcell.maintenanceservice.business.rules.MaintenanceBusinessRules;
 import bootcamps.turkcell.maintenanceservice.business.services.MaintenanceService;
 import bootcamps.turkcell.maintenanceservice.domain.entities.Maintenance;

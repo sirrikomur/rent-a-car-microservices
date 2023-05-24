@@ -13,7 +13,14 @@
         <option value="$PROJECT_DIR$/MaintenanceService/pom.xml" />
         <option value="$PROJECT_DIR$/InvoiceService/pom.xml" />
         <option value="$PROJECT_DIR$/PaymentService/pom.xml" />
+        <option value="$PROJECT_DIR$/AdapterService/pom.xml" />
+        <option value="$PROJECT_DIR$/Adapter/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/Adapter/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_18" default="true" project-jdk-name="corretto-18" project-jdk-type="JavaSDK">

@@ -1,12 +1,11 @@
 package bootcamps.turkcell.maintenanceservice.api.controllers;
 
-
-import bootcamps.turkcell.maintenanceservice.business.dtos.requests.create.CreateMaintenanceRequest;
-import bootcamps.turkcell.maintenanceservice.business.dtos.requests.update.UpdateMaintenanceRequest;
-import bootcamps.turkcell.maintenanceservice.business.dtos.responses.create.CreateMaintenanceResponse;
-import bootcamps.turkcell.maintenanceservice.business.dtos.responses.get.GetAllMaintenancesResponse;
-import bootcamps.turkcell.maintenanceservice.business.dtos.responses.get.GetMaintenanceResponse;
-import bootcamps.turkcell.maintenanceservice.business.dtos.responses.update.UpdateMaintenanceResponse;
+import bootcamps.turkcell.common.utilities.dtos.maintenance.requests.create.CreateMaintenanceRequest;
+import bootcamps.turkcell.common.utilities.dtos.maintenance.requests.update.UpdateMaintenanceRequest;
+import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.create.CreateMaintenanceResponse;
+import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.get.GetAllMaintenancesResponse;
+import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.get.GetMaintenanceResponse;
+import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.update.UpdateMaintenanceResponse;
 import bootcamps.turkcell.maintenanceservice.business.services.MaintenanceService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

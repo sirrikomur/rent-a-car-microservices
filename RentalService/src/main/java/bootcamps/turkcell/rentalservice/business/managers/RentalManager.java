@@ -1,25 +1,25 @@
 package bootcamps.turkcell.rentalservice.business.managers;
 
 
+import bootcamps.turkcell.common.clients.inventory.car.CarClient;
+import bootcamps.turkcell.common.clients.invoice.InvoiceClient;
 import bootcamps.turkcell.common.events.inventory.CarStateUpdatedEvent;
 import bootcamps.turkcell.common.utilities.brokers.kafka.producers.KafkaProducer;
 import bootcamps.turkcell.common.utilities.constants.Topics;
 import bootcamps.turkcell.common.utilities.constants.Values;
+import bootcamps.turkcell.common.utilities.dtos.rental.requests.rental.create.CreateRentalRequest;
+import bootcamps.turkcell.common.utilities.dtos.rental.requests.rental.update.UpdateRentalRequest;
+import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.create.CreateRentalResponse;
+import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.get.GetAllRentalsResponse;
+import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.get.GetRentalResponse;
+import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.update.UpdateRentalResponse;
 import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
 import bootcamps.turkcell.common.utilities.formats.Conversion;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.common.utilities.operations.Calculation;
 import bootcamps.turkcell.common.utilities.operations.Mathematics;
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
-import bootcamps.turkcell.rentalservice.api.clients.inventory.car.CarClient;
-import bootcamps.turkcell.rentalservice.api.clients.invoice.InvoiceClient;
-import bootcamps.turkcell.rentalservice.business.dtos.requests.clients.CreateInvoiceClientRequest;
-import bootcamps.turkcell.rentalservice.business.dtos.requests.rental.create.CreateRentalRequest;
-import bootcamps.turkcell.rentalservice.business.dtos.requests.rental.update.UpdateRentalRequest;
-import bootcamps.turkcell.rentalservice.business.dtos.responses.rental.create.CreateRentalResponse;
-import bootcamps.turkcell.rentalservice.business.dtos.responses.rental.get.GetAllRentalsResponse;
-import bootcamps.turkcell.rentalservice.business.dtos.responses.rental.get.GetRentalResponse;
-import bootcamps.turkcell.rentalservice.business.dtos.responses.rental.update.UpdateRentalResponse;
+
 import bootcamps.turkcell.rentalservice.business.rules.RentalBusinessRules;
 import bootcamps.turkcell.rentalservice.business.services.RentalService;
 import bootcamps.turkcell.rentalservice.domain.entities.Rental;
@@ -118,7 +118,7 @@ public class RentalManager implements RentalService {
         double dailyRental = car.getDailyRental();
         double rentalPrice = calculateRentalPrice(Calculation.daysBetween(rental.getStartDate(), rental.getEndDate()), dailyRental, Values.TaxRate.VAT);
 
-        //pay(rentalPrice);
+        pay(rentalPrice);
 
         invoiceClient.create(new CreateInvoiceClientRequest(
                 car.getBrandName(),
@@ -131,9 +131,9 @@ public class RentalManager implements RentalService {
                 rentalPrice));
     }
 
-    /*private void pay(double rentalPrice) {
+    private void pay(double rentalPrice) {
         paymentService.pay(new Card(), rentalPrice);
-    }*/
+    }
 
     private double calculateRentalPrice(int numberOfDaysRented, double dailyPrice, double taxRate) {
         var percent = Mathematics.addPercentOf(dailyPrice, taxRate);

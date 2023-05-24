@@ -1,11 +1,11 @@
 package bootcamps.turkcell.inventoryservice.business.services;
 
-import bootcamps.turkcell.inventoryservice.business.dtos.requests.model.create.CreateModelRequest;
-import bootcamps.turkcell.inventoryservice.business.dtos.requests.model.update.UpdateModelRequest;
-import bootcamps.turkcell.inventoryservice.business.dtos.responses.model.create.CreateModelResponse;
-import bootcamps.turkcell.inventoryservice.business.dtos.responses.model.get.GetAllModelsResponse;
-import bootcamps.turkcell.inventoryservice.business.dtos.responses.model.get.GetModelResponse;
-import bootcamps.turkcell.inventoryservice.business.dtos.responses.model.update.UpdateModelResponse;
+import bootcamps.turkcell.common.utilities.dtos.inventory.requests.model.create.CreateModelRequest;
+import bootcamps.turkcell.common.utilities.dtos.inventory.requests.model.update.UpdateModelRequest;
+import bootcamps.turkcell.common.utilities.dtos.inventory.responses.model.create.CreateModelResponse;
+import bootcamps.turkcell.common.utilities.dtos.inventory.responses.model.get.GetAllModelsResponse;
+import bootcamps.turkcell.common.utilities.dtos.inventory.responses.model.get.GetModelResponse;
+import bootcamps.turkcell.common.utilities.dtos.inventory.responses.model.update.UpdateModelResponse;
 
 import java.util.List;
 import java.util.UUID;
