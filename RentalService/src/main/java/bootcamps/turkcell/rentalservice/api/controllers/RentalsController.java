@@ -1,11 +1,11 @@
 package bootcamps.turkcell.rentalservice.api.controllers;
 
-import bootcamps.turkcell.common.utilities.dtos.rental.requests.rental.create.CreateRentalRequest;
-import bootcamps.turkcell.common.utilities.dtos.rental.requests.rental.update.UpdateRentalRequest;
-import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.create.CreateRentalResponse;
-import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.get.GetAllRentalsResponse;
-import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.get.GetRentalResponse;
-import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.update.UpdateRentalResponse;
+import bootcamps.turkcell.common.models.dtos.rental.requests.rental.create.CreateRentalRequest;
+import bootcamps.turkcell.common.models.dtos.rental.requests.rental.update.UpdateRentalRequest;
+import bootcamps.turkcell.common.models.dtos.rental.responses.rental.create.CreateRentalResponse;
+import bootcamps.turkcell.common.models.dtos.rental.responses.rental.get.GetAllRentalsResponse;
+import bootcamps.turkcell.common.models.dtos.rental.responses.rental.get.GetRentalResponse;
+import bootcamps.turkcell.common.models.dtos.rental.responses.rental.update.UpdateRentalResponse;
 import bootcamps.turkcell.rentalservice.business.services.RentalService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

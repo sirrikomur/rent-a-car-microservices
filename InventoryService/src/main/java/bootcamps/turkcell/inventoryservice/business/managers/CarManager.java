@@ -1,18 +1,18 @@
 package bootcamps.turkcell.inventoryservice.business.managers;
 
 
-import bootcamps.turkcell.common.events.inventory.CarCreatedEvent;
-import bootcamps.turkcell.common.events.inventory.CarDeletedEvent;
-import bootcamps.turkcell.common.events.inventory.CarStateUpdatedEvent;
+import bootcamps.turkcell.common.models.events.inventory.CarCreatedEvent;
+import bootcamps.turkcell.common.models.events.inventory.CarDeletedEvent;
+import bootcamps.turkcell.common.models.events.inventory.CarStateUpdatedEvent;
 import bootcamps.turkcell.common.utilities.brokers.kafka.producers.KafkaProducer;
 import bootcamps.turkcell.common.utilities.constants.Topics;
-import bootcamps.turkcell.common.utilities.dtos.inventory.requests.car.create.CreateCarRequest;
-import bootcamps.turkcell.common.utilities.dtos.inventory.requests.car.update.UpdateCarRequest;
-import bootcamps.turkcell.common.utilities.dtos.inventory.responses.car.create.CreateCarResponse;
-import bootcamps.turkcell.common.utilities.dtos.inventory.responses.car.get.GetAllCarsResponse;
-import bootcamps.turkcell.common.utilities.dtos.inventory.responses.car.get.GetCarResponse;
-import bootcamps.turkcell.common.utilities.dtos.inventory.responses.car.update.UpdateCarResponse;
-import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
+import bootcamps.turkcell.common.models.dtos.inventory.requests.car.create.CreateCarRequest;
+import bootcamps.turkcell.common.models.dtos.inventory.requests.car.update.UpdateCarRequest;
+import bootcamps.turkcell.common.models.dtos.inventory.responses.car.create.CreateCarResponse;
+import bootcamps.turkcell.common.models.dtos.inventory.responses.car.get.GetAllCarsResponse;
+import bootcamps.turkcell.common.models.dtos.inventory.responses.car.get.GetCarResponse;
+import bootcamps.turkcell.common.models.dtos.inventory.responses.car.update.UpdateCarResponse;
+import bootcamps.turkcell.common.models.enums.inventory.CarState;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
 import bootcamps.turkcell.inventoryservice.business.rules.CarBusinessRules;

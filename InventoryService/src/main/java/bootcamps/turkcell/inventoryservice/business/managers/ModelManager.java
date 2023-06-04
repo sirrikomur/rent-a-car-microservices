@@ -1,14 +1,14 @@
 package bootcamps.turkcell.inventoryservice.business.managers;
 
-import bootcamps.turkcell.common.events.inventory.ModelDeletedEvent;
+import bootcamps.turkcell.common.models.events.inventory.ModelDeletedEvent;
 import bootcamps.turkcell.common.utilities.brokers.kafka.producers.KafkaProducer;
 import bootcamps.turkcell.common.utilities.constants.Topics;
-import bootcamps.turkcell.common.utilities.dtos.inventory.requests.model.create.CreateModelRequest;
-import bootcamps.turkcell.common.utilities.dtos.inventory.requests.model.update.UpdateModelRequest;
-import bootcamps.turkcell.common.utilities.dtos.inventory.responses.model.create.CreateModelResponse;
-import bootcamps.turkcell.common.utilities.dtos.inventory.responses.model.get.GetAllModelsResponse;
-import bootcamps.turkcell.common.utilities.dtos.inventory.responses.model.get.GetModelResponse;
-import bootcamps.turkcell.common.utilities.dtos.inventory.responses.model.update.UpdateModelResponse;
+import bootcamps.turkcell.common.models.dtos.inventory.requests.model.create.CreateModelRequest;
+import bootcamps.turkcell.common.models.dtos.inventory.requests.model.update.UpdateModelRequest;
+import bootcamps.turkcell.common.models.dtos.inventory.responses.model.create.CreateModelResponse;
+import bootcamps.turkcell.common.models.dtos.inventory.responses.model.get.GetAllModelsResponse;
+import bootcamps.turkcell.common.models.dtos.inventory.responses.model.get.GetModelResponse;
+import bootcamps.turkcell.common.models.dtos.inventory.responses.model.update.UpdateModelResponse;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
 import bootcamps.turkcell.inventoryservice.business.rules.ModelBusinessRules;

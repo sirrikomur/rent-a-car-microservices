@@ -2,6 +2,7 @@ package bootcamps.turkcell.common.utilities.constants;
 
 public class Paths {
     public static final String ConfigurationBasePackage = "bootcamps.turkcell.common.configurations";
+    public static final String FeignClientsBasePackage = "bootcamps.turkcell.common.clients";
 
     public static class Inventory {
         public static final String ServiceBasePackage = "bootcamps.turkcell.inventoryservice";

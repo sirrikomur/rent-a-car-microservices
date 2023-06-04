@@ -1,6 +1,6 @@
 package bootcamps.turkcell.common.utilities.formats;
 
-import bootcamps.turkcell.common.events.Event;
+import bootcamps.turkcell.common.models.events.Event;
 
 import java.text.MessageFormat;
 

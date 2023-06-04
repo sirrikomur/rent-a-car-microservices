@@ -1,11 +1,11 @@
 package bootcamps.turkcell.invoiceservice.api.controllers;
 
-import bootcamps.turkcell.common.utilities.dtos.invoice.requests.create.CreateInvoiceRequest;
-import bootcamps.turkcell.common.utilities.dtos.invoice.requests.update.UpdateInvoiceRequest;
-import bootcamps.turkcell.common.utilities.dtos.invoice.responses.create.CreateInvoiceResponse;
-import bootcamps.turkcell.common.utilities.dtos.invoice.responses.get.GetAllInvoicesResponse;
-import bootcamps.turkcell.common.utilities.dtos.invoice.responses.get.GetInvoiceResponse;
-import bootcamps.turkcell.common.utilities.dtos.invoice.responses.update.UpdateInvoiceResponse;
+import bootcamps.turkcell.common.models.dtos.invoice.requests.create.CreateInvoiceRequest;
+import bootcamps.turkcell.common.models.dtos.invoice.requests.update.UpdateInvoiceRequest;
+import bootcamps.turkcell.common.models.dtos.invoice.responses.create.CreateInvoiceResponse;
+import bootcamps.turkcell.common.models.dtos.invoice.responses.get.GetAllInvoicesResponse;
+import bootcamps.turkcell.common.models.dtos.invoice.responses.get.GetInvoiceResponse;
+import bootcamps.turkcell.common.models.dtos.invoice.responses.update.UpdateInvoiceResponse;
 import bootcamps.turkcell.invoiceservice.business.services.InvoiceService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

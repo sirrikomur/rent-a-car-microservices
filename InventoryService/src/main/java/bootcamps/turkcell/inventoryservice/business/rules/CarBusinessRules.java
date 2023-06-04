@@ -3,7 +3,7 @@ package bootcamps.turkcell.inventoryservice.business.rules;
 
 
 import bootcamps.turkcell.common.utilities.constants.ExceptionDetail;
-import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
+import bootcamps.turkcell.common.models.enums.inventory.CarState;
 import bootcamps.turkcell.common.utilities.exceptions.business.BusinessException;
 import bootcamps.turkcell.inventoryservice.domain.entities.Car;
 import bootcamps.turkcell.inventoryservice.repository.CarRepository;

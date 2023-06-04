@@ -1,11 +1,11 @@
 package bootcamps.turkcell.filterservice.business.managers;
 
-import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
+import bootcamps.turkcell.common.models.enums.inventory.CarState;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.filterservice.business.dtos.responses.GetAllCarFiltersResponse;
 import bootcamps.turkcell.filterservice.business.dtos.responses.GetCarFilterResponse;
 import bootcamps.turkcell.filterservice.business.services.CarFilterService;
-import bootcamps.turkcell.filterservice.domain.entities.CarFilter;
+import bootcamps.turkcell.filterservice.domain.entities.InventoryFilter;
 import bootcamps.turkcell.filterservice.repository.CarFilterRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,12 +32,12 @@ public class CarFilterManager implements CarFilterService {
     }
 
     @Override
-    public CarFilter getByCarId(UUID carId) {
+    public InventoryFilter getByCarId(UUID carId) {
         return repository.findByCarId(carId);
     }
 
     @Override
-    public void add(CarFilter filter) {
+    public void add(InventoryFilter filter) {
         filter.setId(UUID.randomUUID());
         repository.save(filter);
     }

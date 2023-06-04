@@ -2,7 +2,7 @@ package bootcamps.turkcell.maintenanceservice.business.rules;
 
 
 import bootcamps.turkcell.common.utilities.constants.ExceptionDetail;
-import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
+import bootcamps.turkcell.common.models.enums.inventory.CarState;
 import bootcamps.turkcell.common.utilities.exceptions.business.BusinessException;
 import bootcamps.turkcell.maintenanceservice.repository.MaintenanceRepository;
 import lombok.AllArgsConstructor;

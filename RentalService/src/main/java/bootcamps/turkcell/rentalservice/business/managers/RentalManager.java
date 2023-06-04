@@ -1,25 +1,27 @@
 package bootcamps.turkcell.rentalservice.business.managers;
 
 
-import bootcamps.turkcell.common.clients.inventory.car.CarClient;
-import bootcamps.turkcell.common.clients.invoice.InvoiceClient;
-import bootcamps.turkcell.common.events.inventory.CarStateUpdatedEvent;
+import bootcamps.turkcell.common.models.events.inventory.CarStateUpdatedEvent;
 import bootcamps.turkcell.common.utilities.brokers.kafka.producers.KafkaProducer;
 import bootcamps.turkcell.common.utilities.constants.Topics;
 import bootcamps.turkcell.common.utilities.constants.Values;
-import bootcamps.turkcell.common.utilities.dtos.rental.requests.rental.create.CreateRentalRequest;
-import bootcamps.turkcell.common.utilities.dtos.rental.requests.rental.update.UpdateRentalRequest;
-import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.create.CreateRentalResponse;
-import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.get.GetAllRentalsResponse;
-import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.get.GetRentalResponse;
-import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.update.UpdateRentalResponse;
-import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
+import bootcamps.turkcell.common.models.dtos.invoice.requests.create.CreateInvoiceRequest;
+import bootcamps.turkcell.common.models.dtos.payment.requests.PaymentRequest;
+import bootcamps.turkcell.common.models.dtos.rental.requests.rental.create.CreateRentalRequest;
+import bootcamps.turkcell.common.models.dtos.rental.requests.rental.update.UpdateRentalRequest;
+import bootcamps.turkcell.common.models.dtos.rental.responses.rental.create.CreateRentalResponse;
+import bootcamps.turkcell.common.models.dtos.rental.responses.rental.get.GetAllRentalsResponse;
+import bootcamps.turkcell.common.models.dtos.rental.responses.rental.get.GetRentalResponse;
+import bootcamps.turkcell.common.models.dtos.rental.responses.rental.update.UpdateRentalResponse;
+import bootcamps.turkcell.common.models.enums.inventory.CarState;
 import bootcamps.turkcell.common.utilities.formats.Conversion;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.common.utilities.operations.Calculation;
 import bootcamps.turkcell.common.utilities.operations.Mathematics;
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
-
+import bootcamps.turkcell.rentalservice.api.clients.InventoryServiceClient;
+import bootcamps.turkcell.rentalservice.api.clients.InvoiceServiceClient;
+import bootcamps.turkcell.rentalservice.api.clients.PaymentServiceClient;
 import bootcamps.turkcell.rentalservice.business.rules.RentalBusinessRules;
 import bootcamps.turkcell.rentalservice.business.services.RentalService;
 import bootcamps.turkcell.rentalservice.domain.entities.Rental;
@@ -39,8 +41,9 @@ public class RentalManager implements RentalService {
     private final CrudRules crudRules;
     private final KafkaProducer producer;
     private final ModelMapperService mapper;
-    private final CarClient carClient;
-    private final InvoiceClient invoiceClient;
+    private final InventoryServiceClient inventoryServiceClient;
+    private final InvoiceServiceClient invoiceServiceClient;
+    private final PaymentServiceClient paymentServiceClient;
 
     @Override
     public List<GetAllRentalsResponse> getAll() {
@@ -69,7 +72,7 @@ public class RentalManager implements RentalService {
         rental.setStartDate(startDate);
         rental.setEndDate(endDate);
         rental.setCompleted(false);
-        carClient.changeState(request.getCarId(), CarState.RENTED);
+        inventoryServiceClient.changeState(request.getCarId(), CarState.RENTED);
 
         var createdRental = repository.save(rental);
 
@@ -89,9 +92,9 @@ public class RentalManager implements RentalService {
         rental.setCompleted(true);
         repository.save(rental);
 
-        carClient.changeState(carId, CarState.AVAILABLE);
-
         createInvoice(carId, rental);
+
+        inventoryServiceClient.changeState(carId, CarState.AVAILABLE);
 
         return mapper.forResponse().map(rental, GetRentalResponse.class);
     }
@@ -109,18 +112,18 @@ public class RentalManager implements RentalService {
     @Override
     public void delete(UUID id) {
         crudRules.idCannotBeProcessedWhenNotExists(id, repository);
-        carClient.changeState(repository.findById(id).orElseThrow().getCarId(), CarState.AVAILABLE);
+        inventoryServiceClient.changeState(repository.findById(id).orElseThrow().getCarId(), CarState.AVAILABLE);
         repository.deleteById(id);
     }
 
     private void createInvoice(UUID carId, Rental rental) {
-        var car = carClient.getById(carId);
+        var car = inventoryServiceClient.getById(carId);
         double dailyRental = car.getDailyRental();
         double rentalPrice = calculateRentalPrice(Calculation.daysBetween(rental.getStartDate(), rental.getEndDate()), dailyRental, Values.TaxRate.VAT);
 
         pay(rentalPrice);
 
-        invoiceClient.create(new CreateInvoiceClientRequest(
+        invoiceServiceClient.create(new CreateInvoiceRequest(
                 car.getBrandName(),
                 car.getModelName(),
                 car.getModelYear(),
@@ -131,13 +134,13 @@ public class RentalManager implements RentalService {
                 rentalPrice));
     }
 
-    private void pay(double rentalPrice) {
-        paymentService.pay(new Card(), rentalPrice);
+    private void pay(double amount) {
+        PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setAmount(amount);
+        paymentServiceClient.create(paymentRequest);
     }
 
     private double calculateRentalPrice(int numberOfDaysRented, double dailyPrice, double taxRate) {
-        var percent = Mathematics.addPercentOf(dailyPrice, taxRate);
-        System.err.println(percent);
         return Mathematics.addPercentOf(dailyPrice, taxRate) * numberOfDaysRented;
     }
 }

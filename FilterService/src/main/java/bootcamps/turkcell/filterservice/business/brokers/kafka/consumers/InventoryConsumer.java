@@ -1,15 +1,14 @@
 package bootcamps.turkcell.filterservice.business.brokers.kafka.consumers;
 
-import bootcamps.turkcell.common.events.inventory.*;
+import bootcamps.turkcell.common.models.events.inventory.*;
 import bootcamps.turkcell.common.utilities.constants.Topics;
 import bootcamps.turkcell.common.utilities.formats.Information;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.filterservice.business.services.CarFilterService;
-import bootcamps.turkcell.filterservice.domain.entities.CarFilter;
+import bootcamps.turkcell.filterservice.domain.entities.InventoryFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,7 +24,7 @@ public class InventoryConsumer {
             topics = Topics.Inventory.CAR_CREATED
     )
     public void consume(CarCreatedEvent event) {
-        var filter = mapper.forRequest().map(event, CarFilter.class);
+        var filter = mapper.forRequest().map(event, InventoryFilter.class);
         carFilterService.add(filter);
         log.info(Information.Consume.log(event));
     }

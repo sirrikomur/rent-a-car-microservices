@@ -1,11 +1,11 @@
 package bootcamps.turkcell.inventoryservice.api.controllers;
 
-import bootcamps.turkcell.common.utilities.dtos.inventory.requests.brand.create.CreateBrandRequest;
-import bootcamps.turkcell.common.utilities.dtos.inventory.requests.brand.update.UpdateBrandRequest;
-import bootcamps.turkcell.common.utilities.dtos.inventory.responses.brand.create.CreateBrandResponse;
-import bootcamps.turkcell.common.utilities.dtos.inventory.responses.brand.get.GetAllBrandsResponse;
-import bootcamps.turkcell.common.utilities.dtos.inventory.responses.brand.get.GetBrandResponse;
-import bootcamps.turkcell.common.utilities.dtos.inventory.responses.brand.update.UpdateBrandResponse;
+import bootcamps.turkcell.common.models.dtos.inventory.requests.brand.create.CreateBrandRequest;
+import bootcamps.turkcell.common.models.dtos.inventory.requests.brand.update.UpdateBrandRequest;
+import bootcamps.turkcell.common.models.dtos.inventory.responses.brand.create.CreateBrandResponse;
+import bootcamps.turkcell.common.models.dtos.inventory.responses.brand.get.GetAllBrandsResponse;
+import bootcamps.turkcell.common.models.dtos.inventory.responses.brand.get.GetBrandResponse;
+import bootcamps.turkcell.common.models.dtos.inventory.responses.brand.update.UpdateBrandResponse;
 import bootcamps.turkcell.inventoryservice.business.services.BrandService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

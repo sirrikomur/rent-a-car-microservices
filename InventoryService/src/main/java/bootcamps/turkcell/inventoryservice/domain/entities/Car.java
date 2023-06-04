@@ -1,6 +1,6 @@
 package bootcamps.turkcell.inventoryservice.domain.entities;
 
-import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
+import bootcamps.turkcell.common.models.enums.inventory.CarState;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

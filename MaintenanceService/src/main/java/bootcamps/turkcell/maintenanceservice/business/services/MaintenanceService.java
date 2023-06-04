@@ -1,11 +1,11 @@
 package bootcamps.turkcell.maintenanceservice.business.services;
 
-import bootcamps.turkcell.common.utilities.dtos.maintenance.requests.create.CreateMaintenanceRequest;
-import bootcamps.turkcell.common.utilities.dtos.maintenance.requests.update.UpdateMaintenanceRequest;
-import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.create.CreateMaintenanceResponse;
-import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.get.GetAllMaintenancesResponse;
-import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.get.GetMaintenanceResponse;
-import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.update.UpdateMaintenanceResponse;
+import bootcamps.turkcell.common.models.dtos.maintenance.requests.create.CreateMaintenanceRequest;
+import bootcamps.turkcell.common.models.dtos.maintenance.requests.update.UpdateMaintenanceRequest;
+import bootcamps.turkcell.common.models.dtos.maintenance.responses.create.CreateMaintenanceResponse;
+import bootcamps.turkcell.common.models.dtos.maintenance.responses.get.GetAllMaintenancesResponse;
+import bootcamps.turkcell.common.models.dtos.maintenance.responses.get.GetMaintenanceResponse;
+import bootcamps.turkcell.common.models.dtos.maintenance.responses.update.UpdateMaintenanceResponse;
 
 import java.util.List;
 import java.util.UUID;

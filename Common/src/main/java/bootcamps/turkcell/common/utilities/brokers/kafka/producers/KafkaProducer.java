@@ -1,6 +1,6 @@
 package bootcamps.turkcell.common.utilities.brokers.kafka.producers;
 
-import bootcamps.turkcell.common.events.Event;
+import bootcamps.turkcell.common.models.events.Event;
 import bootcamps.turkcell.common.utilities.formats.Information;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

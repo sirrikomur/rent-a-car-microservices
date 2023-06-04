@@ -1,6 +1,6 @@
 package bootcamps.turkcell.filterservice.business.dtos.responses;
 
-import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
+import bootcamps.turkcell.common.models.enums.inventory.CarState;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

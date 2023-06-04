@@ -1,16 +1,16 @@
 package bootcamps.turkcell.maintenanceservice.business.managers;
 
 
-import bootcamps.turkcell.common.clients.inventory.car.CarClient;
-import bootcamps.turkcell.common.utilities.dtos.maintenance.requests.create.CreateMaintenanceRequest;
-import bootcamps.turkcell.common.utilities.dtos.maintenance.requests.update.UpdateMaintenanceRequest;
-import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.create.CreateMaintenanceResponse;
-import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.get.GetAllMaintenancesResponse;
-import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.get.GetMaintenanceResponse;
-import bootcamps.turkcell.common.utilities.dtos.maintenance.responses.update.UpdateMaintenanceResponse;
-import bootcamps.turkcell.common.utilities.enums.inventory.CarState;
+import bootcamps.turkcell.common.models.dtos.maintenance.requests.create.CreateMaintenanceRequest;
+import bootcamps.turkcell.common.models.dtos.maintenance.requests.update.UpdateMaintenanceRequest;
+import bootcamps.turkcell.common.models.dtos.maintenance.responses.create.CreateMaintenanceResponse;
+import bootcamps.turkcell.common.models.dtos.maintenance.responses.get.GetAllMaintenancesResponse;
+import bootcamps.turkcell.common.models.dtos.maintenance.responses.get.GetMaintenanceResponse;
+import bootcamps.turkcell.common.models.dtos.maintenance.responses.update.UpdateMaintenanceResponse;
+import bootcamps.turkcell.common.models.enums.inventory.CarState;
 import bootcamps.turkcell.common.utilities.mappers.modelmapper.ModelMapperService;
 import bootcamps.turkcell.common.utilities.rules.CrudRules;
+import bootcamps.turkcell.maintenanceservice.api.clients.InventoryServiceClient;
 import bootcamps.turkcell.maintenanceservice.business.rules.MaintenanceBusinessRules;
 import bootcamps.turkcell.maintenanceservice.business.services.MaintenanceService;
 import bootcamps.turkcell.maintenanceservice.domain.entities.Maintenance;
@@ -29,7 +29,7 @@ public class MaintenanceManager implements MaintenanceService {
     private final MaintenanceBusinessRules rules;
     private final CrudRules crudRules;
     private final ModelMapperService mapper;
-    private final CarClient carClient;
+    private final InventoryServiceClient inventoryServiceClient;
 
     @Override
     public List<GetAllMaintenancesResponse> getAll() {
@@ -45,14 +45,14 @@ public class MaintenanceManager implements MaintenanceService {
 
     @Override
     public CreateMaintenanceResponse create(CreateMaintenanceRequest request) {
-        var car = carClient.getById(request.getCarId());
+        var car = inventoryServiceClient.getById(request.getCarId());
         rules.carCannotBePutUnderMaintenanceWhenUnderMaintenance(request.getCarId());
         rules.carCannotBePutUnderMaintenanceWhenNotAvailable(car.getCarState());
         Maintenance maintenance = mapper.forRequest().map(request, Maintenance.class);
         maintenance.setStartDate(LocalDateTime.now());
         repository.save(maintenance);
 
-        carClient.changeState(request.getCarId(), CarState.MAINTENANCE);
+        inventoryServiceClient.changeState(request.getCarId(), CarState.MAINTENANCE);
         return mapper.forResponse().map(maintenance, CreateMaintenanceResponse.class);
     }
 
@@ -71,7 +71,7 @@ public class MaintenanceManager implements MaintenanceService {
         crudRules.idCannotBeProcessedWhenNotExists(id, repository);
 
         var carId = repository.findById(id).orElseThrow().getCarId();
-        carClient.changeState(carId, CarState.AVAILABLE);
+        inventoryServiceClient.changeState(carId, CarState.AVAILABLE);
         repository.deleteById(id);
     }
 
@@ -85,7 +85,7 @@ public class MaintenanceManager implements MaintenanceService {
         maintenance.setEndDate(LocalDateTime.now());
         repository.save(maintenance);
 
-        carClient.changeState(maintenance.getCarId(), CarState.AVAILABLE);
+        inventoryServiceClient.changeState(maintenance.getCarId(), CarState.AVAILABLE);
         return mapper.forResponse().map(maintenance, GetMaintenanceResponse.class);
     }
 }

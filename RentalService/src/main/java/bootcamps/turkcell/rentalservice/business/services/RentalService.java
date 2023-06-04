@@ -1,11 +1,11 @@
 package bootcamps.turkcell.rentalservice.business.services;
 
-import bootcamps.turkcell.common.utilities.dtos.rental.requests.rental.create.CreateRentalRequest;
-import bootcamps.turkcell.common.utilities.dtos.rental.requests.rental.update.UpdateRentalRequest;
-import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.create.CreateRentalResponse;
-import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.get.GetAllRentalsResponse;
-import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.get.GetRentalResponse;
-import bootcamps.turkcell.common.utilities.dtos.rental.responses.rental.update.UpdateRentalResponse;
+import bootcamps.turkcell.common.models.dtos.rental.requests.rental.create.CreateRentalRequest;
+import bootcamps.turkcell.common.models.dtos.rental.requests.rental.update.UpdateRentalRequest;
+import bootcamps.turkcell.common.models.dtos.rental.responses.rental.create.CreateRentalResponse;
+import bootcamps.turkcell.common.models.dtos.rental.responses.rental.get.GetAllRentalsResponse;
+import bootcamps.turkcell.common.models.dtos.rental.responses.rental.get.GetRentalResponse;
+import bootcamps.turkcell.common.models.dtos.rental.responses.rental.update.UpdateRentalResponse;
 
 import java.util.List;
 import java.util.UUID;
