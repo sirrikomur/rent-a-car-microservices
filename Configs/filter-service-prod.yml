@@ -1,10 +1,12 @@
 spring:
   application:
     name: filter-service
+
   data:
     mongodb:
       database: filterDB
       uri: mongodb://localhost:27017
+
   kafka:
     consumer:
       bootstrap-servers: localhost:9092
@@ -16,6 +18,7 @@ spring:
             trusted:
               packages: "*"
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
 eureka:
   instance:
     hostname: localhost
@@ -26,3 +29,6 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka/
+
+server:
+  port: 0
